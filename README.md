@@ -1,4 +1,4 @@
-Simple server configuration template.
+Simple server configuration template by Ansible and Vagrant
 ======================
 
 This is a simple template for automated server configuration management.  The main mechanism is:

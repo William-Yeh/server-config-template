@@ -1,0 +1,72 @@
+---
+# file: roles/common/tasks/centos6_x64-yum.yml
+# Configure CentOS yum system.
+#
+# @see http://www.ha97.com/2626.html
+#
+# tags: packages
+#
+
+- name: install yum-priorities
+  sudo: True
+  yum: pkg=yum-priorities state=installed
+  tags: packages
+
+- name: set CentOS base priorities to highest
+  sudo: True
+  action: copy src=../files/CentOS-Base.repo dest=/etc/yum.repos.d/ owner=root group=root mode=0644
+
+
+#-------------------------------------#
+# RPMforge
+#
+
+- name: check if RPMforge is installed
+  sudo: True
+  yum: pkg=rpmforge-release state=installed
+  register: rpmforge_installed
+  ignore_errors: yes
+  tags: packages
+  
+- name: fetch RPMforge .rpm file, if necessary
+  action: get_url url=${rpmforge_file_url}  dest=/tmp/${rpmforge_file}
+  when: rpmforge_installed|failed
+  tags: packages
+
+- name: install RPMforge, if necessary
+  sudo: True
+  action: command creates=/tmp/rpmforge chdir=/tmp rpm --force -Uvh  /tmp/${rpmforge_file}
+  when: rpmforge_installed|failed
+  tags: packages
+
+- name: set lower RPMforge priorities
+  sudo: True
+  action: copy src=../files/rpmforge.repo dest=/etc/yum.repos.d/ owner=root group=root mode=0644
+
+
+#-------------------------------------#
+# EPEL
+#
+
+- name: check if EPEL is installed
+  sudo: True
+  yum: pkg=epel-release state=installed
+  register: epel_installed
+  ignore_errors: yes
+  tags: packages
+ 
+- name: fetch EPEL .rpm file, if necessary
+  action: get_url url=${epel_file_url}  dest=/tmp/${epel_file}
+  when: epel_installed|failed
+  tags: packages
+
+- name: install EPEL, if necessary
+  sudo: True
+  action: command creates=/tmp/epel chdir=/tmp rpm --force -Uvh  /tmp/${epel_file}
+  when: epel_installed|failed
+  tags: packages
+
+- name: set lower EPEL priorities
+  sudo: True
+  action: copy src=../files/epel.repo dest=/etc/yum.repos.d/ owner=root group=root mode=0644
+

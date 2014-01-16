@@ -1,0 +1,98 @@
+---
+# file: roles/cassandra/tasks/main.yml
+# Configure Cassandra via DataStax's Community distribution.
+#
+# @see http://www.datastax.com/documentation/cassandra/1.2/index.html#cassandra/install/installRHEL_t.html?pagename=docs&version=1.2&file=install/install_rpm
+#
+# tags: packages
+#
+
+
+#- name: stop cassandra service, if any
+#  sudo: True
+#  action: service name=cassandra state=stopped
+#  ignore_errors: true
+
+
+
+- name: add DataStax to yum's repo list
+  sudo: True
+  action: copy src=../files/datastax.repo dest=/etc/yum.repos.d/ owner=root group=root mode=0644
+
+
+- name: uninstall old Cassandra, if any
+  sudo: True
+  yum: pkg=apache-cassandra1 state=absent
+  tags: packages
+
+- name: uninstall old Cassandra, if any
+  sudo: True
+  yum: pkg=apache-cassandra11 state=absent
+  tags: packages
+
+
+#--------------------------------------#
+# installation option 1:
+#   DataStax Community distribution
+#
+
+#- name: install Cassandra via DataStax Community distribution
+#  sudo: True
+#  yum: pkg=dsc12 state=installed
+#  tags: packages
+
+
+
+#--------------------------------------#
+# installation option 2: 
+#   Original Apache Cassandra
+#
+
+- name: install standard Apache Cassandra
+  sudo: True
+  yum: pkg=cassandra12 state=installed
+  #yum: pkg=cassandra20 state=installed
+  tags: packages
+
+- name: install cql module of Python
+  sudo: True
+  yum: pkg=python26-cql state=installed
+  tags: packages python
+
+#- name: install cql module of Python
+#  sudo: True
+#  action: command pip install cql
+
+
+
+#--------------------------------------#
+# configure Cassandra
+#
+
+- name: configure Cassandra
+  sudo: True
+  action: template src=../templates/cassandra.yaml.j2 dest=$cassandra_config_path/default.conf/cassandra.yaml
+
+
+
+#--------------------------------------#
+# configure Cassandra as service
+#
+
+- name: logrotate for Cassandra output.log
+  sudo: True
+  action: copy src=../files/cassandra.logrotate dest=/etc/logrotate.d/cassandra owner=root group=root mode=0644
+
+- name: copy to /etc/init.d
+  sudo: True
+  action: copy src=../files/init-cassandra.sh dest=/etc/rc.d/init.d/cassandra owner=root group=root mode=0755
+
+- name: chkconfig
+  sudo: True
+  action: shell chkconfig --add cassandra
+  action: shell chkconfig --level 345 cassandra on
+
+- name: start cassandra
+  sudo: True
+  action: service name=cassandra state=started enabled=yes
+

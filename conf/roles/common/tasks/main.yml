@@ -1,0 +1,17 @@
+---
+# file: roles/common/tasks/main.yml
+# Configure CentOS common settings.
+#
+
+- include: centos6_x64-time.yml
+- include: centos6_x64-yum.yml
+- include: centos6_x64-limit.yml
+- include: centos6_x64-disable-services.yml
+#- include: centos6_x64-sudo.yml
+
+- include: maintenance.yml
+
+- include: tools.yml
+- include: perl.yml
+- include: python.yml
+- include: monitors.yml

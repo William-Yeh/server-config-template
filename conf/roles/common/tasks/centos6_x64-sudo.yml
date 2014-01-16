@@ -1,0 +1,18 @@
+---
+# file: roles/common/tasks/centos6_x64-sudo.yml
+# Configure CentOS: sudo.
+#
+# Adapted from:
+#    "Ansible - /etc/sudoers safety and sanity checking in playbook":
+#    https://raymii.org/s/tutorials/Ansible_-_Sudo_Safety_and_Sanity_Checks.html
+#
+#
+
+- name: Create "wheel" group, if necessary
+  sudo: True
+  group: name=wheel system=yes state=present
+
+- name: Final sudoers file check
+  sudo: True
+  action: copy src=../files/sudoers  dest=/etc/sudoers  validate='visudo -c -f %s'  backup=yes   owner=root group=root mode=0440
+

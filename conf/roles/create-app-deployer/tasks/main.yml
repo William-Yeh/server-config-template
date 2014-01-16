@@ -1,0 +1,85 @@
+---
+# file: roles/create-app-deployer/tasks/main.yml
+# Configure app deployer: account, home directory, permissions.
+#
+#
+# Required pamameter:
+#
+#  - APP_DEPLOYER: the account of app deployer
+#  - APP_DEPLOYER_PASSWORD: the password of app deployer
+#
+# For security reason, the parameter isn't hard-coded into SCM;
+# please specify it manually, e.g., typical command line usage:
+#
+#   [Case 1] invoked as root:
+#
+#      % ansible-playbook            \
+#          -i [INVENTORY_FILENAME]   \
+#          -e "APP_DEPLOYER=XXX APP_DEPLOYER_PASSWORD=YYY" \
+#          -u root -k -vvv   ZZZ.yml
+#
+#   [Case 2] invoked as wheel user (without sudo password):
+#
+#      % ansible-playbook            \
+#          -i [INVENTORY_FILENAME]   \
+#          -e "APP_DEPLOYER=XXX APP_DEPLOYER_PASSWORD=YYY" \
+#          -u WWW -k -vvv   ZZZ.yml
+#
+#   [Case 3] invoked as wheel user (with sudo password):
+#
+#      % ansible-playbook            \
+#          -i [INVENTORY_FILENAME]   \
+#          -e "APP_DEPLOYER=XXX APP_DEPLOYER_PASSWORD=YYY" \
+#          -u WWW -k  --ask-sudo-pass  -vvv   ZZZ.yml
+#
+#
+
+- name: precondition - APP_DEPLOYER
+  fail: msg="ERROR - required variable 'APP_DEPLOYER' missing."
+  when: APP_DEPLOYER is not defined
+
+- name: precondition - APP_DEPLOYER_PASSWORD
+  fail: msg="ERROR - required variable 'APP_DEPLOYER_PASSWORD' missing."
+  when: APP_DEPLOYER_PASSWORD is not defined
+
+
+
+- name: Create "wheel" group, if necessary
+  sudo: True
+  group: name=wheel system=yes state=present
+
+
+- name: Create account for app deployer, if necessary
+  sudo: True
+  user: name=$APP_DEPLOYER  group=wheel createhome=yes shell=/bin/zsh comment="app deployer" state=present
+
+- name: Change password
+  sudo: True
+  action: shell echo "$APP_DEPLOYER:$APP_DEPLOYER_PASSWORD" | chpasswd
+
+- name: Grant "x" permission for directory
+  sudo: True
+  command: /bin/chmod  a+x  "/home/$APP_DEPLOYER"
+
+
+
+- name: get oh-my-zsh
+  sudo: True
+#  shell: cd /home/$APP_DEPLOYER ; curl -L https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh | sh
+  script: ../files/install-oh-my-zsh.sh  $APP_DEPLOYER  /home/$APP_DEPLOYER
+
+- name: add convenient aliases
+  sudo: True
+  action: copy src=../files/.aliases dest=/home/$APP_DEPLOYER owner=$APP_DEPLOYER group=wheel mode=0644
+
+- name: load .aliases into ZSH
+  sudo: True
+  lineinfile: dest=/home/$APP_DEPLOYER/.zshrc  insertafter=EOF  state=present  regexp=''  line='$item'
+  with_items:
+   - 'source $HOME/.aliases  # convenient alias;  @see http://askubuntu.com/questions/31216/setting-up-aliases-in-zsh'
+
+
+- name: Final sudoers file check
+  sudo: True
+  action: copy src=../files/sudoers-app-deploy  dest=/etc/sudoers.d/app-deploy  validate='visudo -c -f %s'  backup=yes   owner=root group=root mode=0440
+

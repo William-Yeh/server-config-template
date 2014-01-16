@@ -1,0 +1,69 @@
+---
+# file: roles/app-SAMPLE/tasks/main.yml
+# Configure app SAMPLE: log
+#
+# !!! TODO change all 'SAMPLE' wordings.
+#
+#
+# Required pamameter:
+#
+#  - APP_DEPLOYER: the account of app deployer
+#
+# For security reason, the parameter isn't hard-coded into SCM;
+# please specify it manually, e.g., typical command line usage:
+#
+#   [Case 1] invoked as root:
+#
+#      % ansible-playbook            \
+#          -i [INVENTORY_FILENAME]   \
+#          -e "APP_DEPLOYER=XXX" \
+#          -u root -k -vvv   ZZZ.yml
+#
+#   [Case 2] invoked as wheel user (without sudo password):
+#
+#      % ansible-playbook            \
+#          -i [INVENTORY_FILENAME]   \
+#          -e "APP_DEPLOYER=XXX" \
+#          -u WWW -k -vvv   ZZZ.yml
+#
+#   [Case 3] invoked as wheel user (with sudo password):
+#
+#      % ansible-playbook            \
+#          -i [INVENTORY_FILENAME]   \
+#          -e "APP_DEPLOYER=XXX" \
+#          -u WWW -k  --ask-sudo-pass  -vvv   ZZZ.yml
+#
+# tags: app
+#
+
+
+- name: precondition - APP_DEPLOYER
+  fail: msg="ERROR - required variable 'APP_DEPLOYER' missing."
+  when: APP_DEPLOYER is not defined
+
+
+
+#--------------------------------------#
+# configure 
+#
+
+- name: create log directory
+  sudo: True
+  file: dest=/var/log/SAMPLE  owner=$APP_DEPLOYER group=wheel mode=755 state=directory
+
+
+- name: logrotate for app-SAMPLE logs
+  sudo: True
+  copy: src=../files/SAMPLE.logrotate dest=/etc/logrotate.d/SAMPLE owner=$APP_DEPLOYER group=wheel mode=0644
+
+
+- name: force logrotate to read config file immediately
+  sudo: True
+  command: logrotate -v /etc/logrotate.conf
+
+
+
+#
+# TODO copy files/*-for-nginx.conf to nginx
+# TODO restart nginx
+#

@@ -1,0 +1,18 @@
+---
+# file: roles/common/tasks/perl.yml
+# Configure Perl basic tools.
+#
+# tags: packages perl
+#
+
+- name: install Perl, if necessary
+  sudo: True
+  yum: pkg=perl state=installed
+  tags: packages perl
+
+- name: install CPAN
+  sudo: True
+  yum: pkg=perl-CPAN state=installed
+  tags: packages perl
+
+

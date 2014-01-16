@@ -1,0 +1,105 @@
+---
+# file: roles/common/tasks/tools.yml
+# Configure CentOS useful tools for developers.
+#
+# tags: packages net devel
+#
+
+
+#
+# net tools
+#
+
+- name: install curl
+  sudo: True
+  yum: pkg=curl state=installed
+  tags: packages net
+
+- name: install wget
+  sudo: True
+  yum: pkg=wget state=installed
+  tags: packages net
+
+
+
+#
+# make
+#
+
+- name: install make
+  sudo: True
+  yum: pkg=make state=installed
+  tags: packages devel
+
+
+#
+# ack: a better grep optimized for programmers
+#
+
+- name: download ack
+  sudo: True
+  action: command creates=/usr/local/bin/ack  curl -L -z /usr/local/bin/ack -o /usr/local/bin/ack  http://beyondgrep.com/ack-2.08-single-file
+  tags: packages devel
+
+- name: install ack
+  sudo: True
+  command: /bin/chmod  0755  /usr/local/bin/ack
+  tags: packages devel
+
+
+#
+# Enca: file encoding detection & conversion utility
+#
+
+- name: install enca
+  sudo: True
+  yum: pkg=enca state=installed
+  tags: packages devel
+
+
+
+#
+# subversion
+#
+
+- name: install subversion
+  sudo: True
+  yum: pkg=subversion state=installed
+  tags: packages devel
+
+- name: be sure svnserve is disabled
+  sudo: True
+  service: name=svnserve state=stopped enabled=no
+  tags: packages devel
+
+
+#
+# git
+#
+
+- name: install git
+  sudo: True
+  yum: pkg=git state=installed
+  tags: packages devel
+
+- name: install gitflow
+  sudo: True
+  yum: pkg=gitflow state=installed
+  tags: packages devel
+
+- name: install git-svn
+  sudo: True
+  yum: pkg=git-svn state=installed
+  tags: packages devel
+
+
+#
+# zsh
+#
+
+- name: install zsh
+  sudo: True
+  yum: pkg=zsh state=installed
+  tags: packages devel
+
+

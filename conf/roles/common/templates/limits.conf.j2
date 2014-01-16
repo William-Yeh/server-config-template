@@ -1,0 +1,26 @@
+# Optimized version of /etc/security/limits.conf
+#
+# See the following documents for more details:
+#
+#  - https://github.com/BlueCentre/playbooks/blob/master/files/ulimit/limits-optimized.conf
+#  - http://www.datastax.com/documentation/cassandra/1.2/index.html#cassandra/install/installRecommendSettings.html
+#
+#
+
+#<domain>      <type>  <item>         <value>
+
+*              soft    nofile         {{ ulimit }}
+*              hard    nofile         {{ ulimit }}
+root           soft    nofile         {{ ulimit }}
+root           hard    nofile         {{ ulimit }}
+
+*              soft    memlock        unlimited
+*              hard    memlock        unlimited
+root           soft    memlock        unlimited
+root           hard    memlock        unlimited
+
+*              soft    as             unlimited
+*              hard    as             unlimited
+root           soft    as             unlimited
+root           hard    as             unlimited
+

@@ -1,0 +1,77 @@
+---
+# file: roles/nginx/tasks/main.yml
+# Configure nginx directly from nginx.org official repository
+# with higher priority over EPEL.
+#
+# @see http://wiki.nginx.org/Install
+# tags: packages
+#
+
+
+#- name: stop nginx service, if any
+#  sudo: True
+#  action: service name=nginx state=stopped
+#  ignore_errors: true
+
+
+- name: precondition - nginx_version
+  fail: msg="ERROR - required variable 'nginx_version' missing."
+  when: nginx_version is not defined
+
+
+- name: add nginx.org to yum's repo list
+  sudo: True
+  action: copy src=../files/nginx.repo dest=/etc/yum.repos.d/ owner=root group=root mode=0644
+
+#=================================
+
+
+- name: check if Nginx is installed?
+  action: script ../files/check-nginx-version.sh
+  register: nginx_info
+
+- include: install-nginx.yml
+  when: nginx_info.stdout < nginx_version
+
+
+
+#--------------------------------------#
+# configure nginx as service
+#
+
+- name: logrotate for nginx
+  sudo: True
+  action: copy src=../files/nginx.logrotate dest=/etc/logrotate.d/nginx owner=root group=root mode=0644
+
+- name: copy Nginx main config file
+  sudo: True
+  action: template src=../templates/nginx.conf.j2 dest=$nginx_config_path/nginx.conf
+
+- name: copy Nginx application-specific config files
+  sudo: True
+  copy: src={{ item }}  dest=$nginx_config_path/conf.d  owner=root group=root mode=0644
+  with_fileglob:
+    - "*.conf"
+
+- name: rename default/example conf files in $nginx_config_path/conf.d/
+  sudo: True
+  command: mv -f $nginx_config_path/conf.d/$item  $nginx_config_path/conf.d/$item.bak
+  with_items:
+   - default.conf
+   - example_ssl.conf
+  ignore_errors: true
+
+
+#- name: copy to /etc/init.d
+#  sudo: True
+#  action: copy src=../files/init-nginx.sh dest=/etc/rc.d/init.d/nginx owner=root group=root mode=0755
+
+- name: chkconfig
+  sudo: True
+  action: shell chkconfig --add nginx
+  action: shell chkconfig --level 345 nginx on
+
+- name: start nginx
+  sudo: True
+  action: service name=nginx state=started enabled=yes
+

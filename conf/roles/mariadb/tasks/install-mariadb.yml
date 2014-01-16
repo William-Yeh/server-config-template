@@ -1,0 +1,35 @@
+#
+# install MariaDB
+#
+#
+
+- name: stop MariaDB service, if any
+  sudo: True
+  action: service name=mysql state=stopped
+  ignore_errors: true
+
+- name: install MariaDB
+  sudo: True
+  yum: pkg=MariaDB-server state=installed
+  tags: packages
+
+- name: install MariaDB
+  sudo: True
+  yum: pkg=MariaDB-client state=installed
+  tags: packages
+
+- name: install MariaDB
+  sudo: True
+  yum: pkg=MariaDB-shared state=installed
+  tags: packages
+
+- name: install MariaDB
+  sudo: True
+  yum: pkg=MariaDB-devel  state=installed
+  tags: packages
+
+- name: install MariaDB
+  sudo: True
+  yum: pkg=MariaDB-test   state=installed
+  tags: packages
+

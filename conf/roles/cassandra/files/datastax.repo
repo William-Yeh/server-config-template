@@ -1,0 +1,12 @@
+#
+# DataStax's Cassandra package
+# @see http://www.datastax.com/documentation/cassandra/1.2/index.html#cassandra/install/installRHEL_t.html?pagename=docs&version=1.2&file=install/install_rpm
+#
+#
+
+[datastax] 
+name=DataStax Repo for Apache Cassandra
+baseurl=http://rpm.datastax.com/community
+enabled=1
+gpgcheck=0
+priority=21

@@ -1,0 +1,15 @@
+# Logrotate file for Redis
+#
+# @location /etc/logrotate.d/redis
+# @see http://stackoverflow.com/questions/5496014/redis-logrotate-config
+# 
+
+/var/log/redis/*.log {
+  weekly
+  rotate 10
+  copytruncate
+  delaycompress
+  compress
+  notifempty
+  missingok
+}

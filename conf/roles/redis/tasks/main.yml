@@ -1,0 +1,72 @@
+---
+# file: roles/redis/tasks/main.yml
+# Configure Redis common settings.
+#
+
+#- name: be sure Redis is installed
+#  sudo: True
+#  yum: pkg=redis state=installed
+#  tags: redis packages
+
+
+
+- name: precondition - redis_version
+  fail: msg="ERROR - required variable 'redis_version' missing."
+  when: redis_version is not defined
+
+- name: be sure Redis is never installed previously by yum
+  sudo: True
+  yum: pkg=redis state=absent
+  tags: redis packages
+
+
+
+
+- name: check if Redis is installed?
+  action: script ../files/check-redis-version.sh
+  register: redis_info
+
+- include: install-redis.yml
+  when: redis_info.stdout < redis_version
+
+
+
+- name: logrotate for Redis log files
+  sudo: True
+  action: copy src=../files/redis.logrotate dest=/etc/logrotate.d/redis owner=root group=root mode=0644
+
+- name: chkconfig
+  sudo: True
+  action: shell chkconfig --add redis-server
+  action: shell chkconfig --level 345 redis-server on
+
+- name: start redis-server
+  sudo: True
+  action: service name=redis-server state=started enabled=yes
+
+
+
+- name: let Redis bind all network interfaces, if necessary.
+  sudo: True
+  action: lineinfile dest=$redis_config_path/redis.conf regexp="^bind 127.0.0.1" line="#bind 127.0.0.1" insertafter="^bind"
+  when: redis_bind_all_interfaces is defined
+  register: redis_config_changed
+
+- name: restart redis-server
+  sudo: True
+  action: service name=redis-server state=restarted enabled=yes
+  when: redis_config_changed.changed
+
+
+#  handlers:
+#     - name: restart redis-server
+#       sudo: True
+#       action: service name=redis-server state=restarted enabled=yes
+
+
+
+# @see http://redis.io/topics/admin
+- name: set the Linux kernel overcommit memory setting to 1
+  sudo: True
+  action: sysctl name=vm.overcommit_memory value=1 state=present
+

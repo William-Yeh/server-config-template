@@ -1,0 +1,24 @@
+# Logrotate file for Node.js application: SAMPLE
+#
+# !!! TODO change all 'SAMPLE' wordings.
+#
+# @file     SAMPLE
+# @location /etc/logrotate.d/SAMPLE
+# @see http://drumcoder.co.uk/blog/2012/feb/03/nginx-and-logrotate/
+#
+
+/var/log/SAMPLE/app.log {
+  daily
+  rotate 3
+  missingok
+  copytruncate
+  compress
+  delaycompress
+  notifempty
+  sharedscripts
+  postrotate
+    pkill -USR2 -f app-SAMPLE
+    #kill -USR2 `cat /var/run/SAMPLE/app.pid`
+    #[ ! -f /var/run/SAMPLE/app.pid ] || kill -USR2 `cat /var/run/SAMPLE/app.pid`
+  endscript
+}

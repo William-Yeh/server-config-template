@@ -1,0 +1,30 @@
+#
+# install Ant
+#
+# Adapted from: http://xmodulo.com/2013/03/how-to-install-apache-ant-on-centos.html
+#
+#
+
+- name: set Ant path permission
+  action: file dest=$ant_install_path    mode=755 state=directory
+  sudo: True
+ 
+
+
+
+- name: get Ant tarball
+  action: get_url url=$ant_tarball_url dest=$ant_download_path/$ant_tarball_file
+
+- name: untar and defeather Ant
+  sudo: True
+  action: command creates=$ant_download_path/ant-$ant_version chdir=$ant_download_path tar -xzvf $ant_tarball_file  -C $ant_parent_path
+
+- name: link current version of Ant
+  sudo: True
+  file: src=$ant_install_path  dest=$ant_symlink_path  state=link
+
+- name: link executable path of Ant
+  sudo: True
+  file: src=$ant_symlink_path/bin/ant  dest=$ant_exe_path/ant  state=link
+
+

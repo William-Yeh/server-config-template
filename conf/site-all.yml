@@ -1,0 +1,9 @@
+---
+# file: site-all.yml
+# master playbook that defines entire infrastructure.
+#
+
+- include: site-web.yml
+#- include: site-db.yml
+#- include: site-analyzer.yml
+

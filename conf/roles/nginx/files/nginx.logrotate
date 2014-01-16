@@ -1,0 +1,19 @@
+# Logrotate file for nginx
+#
+# @location /etc/logrotate.d/nginx
+# @see http://drumcoder.co.uk/blog/2012/feb/03/nginx-and-logrotate/
+# 
+
+/var/log/nginx/*.log {
+  size 10M
+  rotate 9
+  missingok
+  copytruncate
+  compress
+  delaycompress
+  notifempty
+  sharedscripts
+  postrotate
+    [ ! -f /var/run/nginx.pid ] || kill -USR1 `cat /var/run/nginx.pid`
+  endscript
+}

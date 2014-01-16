@@ -1,0 +1,42 @@
+Directory layout of this Ansible project.
+
+@see "Directory Layout" section of the following document for more details:
+     "Best Practice": http://ansible.cc/docs/bestpractices.html
+
+
+The top level of the directory would contain files and directories like so:
+
+
+production                # inventory file for production servers
+staging                   # inventory file for staging environment
+development               # inventory file for development environment
+
+group_vars/
+   group1                 # here we assign variables to particular groups
+   group2                 # ""
+   all                    # any default values or universally true values
+host_vars/
+   hostname1              # if systems need specific variables, put them here
+   hostname2              # ""
+
+site.yml                  # master playbook that defines entire infrastructure
+webservers.yml            # playbook for webserver tier
+dbservers.yml             # playbook for dbserver tier
+
+roles/
+    common/               # this hierarchy represents a "role"
+        tasks/            #
+            main.yml      #  <-- tasks file can include smaller files if warranted
+        handlers/         #
+            main.yml      #  <-- handlers file
+        templates/        #  <-- files for use with the template resource
+            ntp.conf.j2   #  <------- templates end in .j2
+        files/            #
+            bar.txt       #  <-- files for use with the copy resource
+            foo.sh        #  <-- script files for use with the script resource
+
+    webtier/              # same kind of structure as "common" was above, done for the webtier role
+    monitoring/           # ""
+    fooapp/               # ""
+
+

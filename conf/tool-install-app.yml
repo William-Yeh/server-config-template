@@ -1,0 +1,40 @@
+---
+# file: tool-install-app.yml
+# Install our own app on server: configure app logs
+#
+#
+# For security reason, the parameter isn't hard-coded into SCM;
+# please specify it manually, e.g., typical command line usage:
+#
+#   [Case 1] invoked as root:
+#
+#      % ansible-playbook            \
+#          -i [INVENTORY_FILENAME]   \
+#          -u root -k -vvv   ZZZ.yml
+#
+#   [Case 2] invoked as wheel user (without sudo password):
+#
+#      % ansible-playbook            \
+#          -i [INVENTORY_FILENAME]   \
+#          -u WWW -k -vvv   ZZZ.yml
+#
+#   [Case 3] invoked as wheel user (with sudo password):
+#
+#      % ansible-playbook            \
+#          -i [INVENTORY_FILENAME]   \
+#          -u WWW -k  --ask-sudo-pass  -vvv   ZZZ.yml
+#
+#
+# @see https://blog.nop.im/entries/ansible
+#
+
+- hosts: all
+
+  vars_prompt:
+    - name: "APP_DEPLOYER"
+      prompt: "INPUT account name for app deployer"
+      private: no
+
+  roles:
+    - app-SAMPLE
+

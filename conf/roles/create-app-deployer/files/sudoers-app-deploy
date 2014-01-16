@@ -1,0 +1,16 @@
+# location: /etc/sudoers.d/
+# sudo for app deployer
+#
+
+
+#
+# agent forwarding; make sure ssh-agent works via sudo
+# @see http://serverfault.com/questions/107187/sudo-su-username-while-keeping-ssh-key-forwarding
+#
+Defaults    env_keep += SSH_AUTH_SOCK
+
+
+# Allows people in group wheel to run all commands,
+# without a password
+%wheel	ALL=(ALL)	NOPASSWD: ALL
+

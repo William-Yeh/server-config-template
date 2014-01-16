@@ -1,0 +1,73 @@
+#
+# install redis
+#
+# Adapted from: https://github.com/tobyhede/ansible-centos-rails-nginx-passenger
+#
+#
+
+- name: add non-privileged "redis" group
+  sudo: True
+  group: name=redis state=present
+- name: add non-privileged "redis" user
+  sudo: True
+  user: name=redis comment="redis server" group="redis" shell="/sbin/nologin"
+
+
+
+- name: set redis executables' path permission
+  action: file dest=$redis_exe_path    mode=755 state=directory
+  sudo: True
+- name: set config_path permission
+  action: file dest=$redis_config_path mode=755 state=directory 
+  sudo: True
+- name: set logfile_path permission
+  action: file dest=$redis_logfile_path owner=redis group=redis mode=755 state=directory
+  sudo: True
+- name: set pidfile_path permission
+  action: file dest=$redis_pidfile_path owner=redis group=redis mode=755 state=directory
+  sudo: True
+- name: set working_dir permission
+  action: file dest=$redis_working_dir owner=redis group=redis mode=755 state=directory        
+  sudo: True
+ 
+
+
+
+- name: get redis tarball
+  action: get_url url=$redis_tarball_url dest=$redis_download_path/$redis_tarball_file
+
+- name: untar and defeather redis
+  action: command creates=$redis_download_path/redis-$redis_version chdir=$redis_download_path tar -xzvf $redis_tarball_file
+
+- name: build redis
+  action: shell chdir=$redis_download_path/redis-$redis_version creates=$redis_build_path/redis-server make
+
+
+
+
+- name: stop redis-server to allow the following copy actions
+  sudo: True
+  ignore_errors: true
+  action: service name=redis-server state=stopped enabled=yes
+
+- name: copy redis server
+  sudo: True
+  action: command cp $redis_build_path/redis-server $redis_exe_path
+
+- name: copy redis cli
+  sudo: True
+  action: command cp $redis_build_path/redis-cli $redis_exe_path
+
+- name: copy redis config file
+  sudo: True
+  action: template src=../templates/redis.conf.j2 dest=$redis_config_path/redis.conf
+
+- name: copy init.d
+  sudo: True
+  action: template src=../templates/init-redis-server.sh.j2 dest=/etc/rc.d/init.d/redis-server owner=root group=root mode=755
+
+
+
+- name: clean up temporary build files
+  action: command rm -rf $redis_download_path/redis-$redis_version
+

@@ -1,0 +1,10 @@
+# dynamic generated or temp directories
+.vagrant/*
+
+
+# generic files to ignore
+*~
+*.lock
+*.DS_Store
+*.swp
+*.out

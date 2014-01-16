@@ -1,0 +1,37 @@
+Ansible installation guide.
+See http://ansible.cc/docs/gettingstarted.html for more details.
+
+
+
+[Install on Mac OSX]
+
+1. Install "Homebrew", if necessary:
+
+   $ ruby <(curl -fsSkL raw.github.com/mxcl/homebrew/go)
+   $ brew update
+   $ brew doctor
+
+2. Install git, if necessary:
+
+   $ brew install git
+
+3. Install Ansible via Homebrew:
+
+   $ brew install ansible
+
+
+
+----------------------------------------
+[Install on other platforms equipped with Python]
+
+
+(Option 1) Simpler approach, maybe a little older version:
+
+   $ sudo pip install ansible
+
+(Option 2) Latest version from git source:
+
+   $ git clone git://github.com/ansible/ansible.git
+   $ cd ./ansible
+   $ source ./hacking/env-setup
+

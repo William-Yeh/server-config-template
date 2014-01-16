@@ -1,0 +1,16 @@
+#
+# install Nginx
+#
+#
+
+- name: stop nginx service, if any
+  sudo: True
+  action: service name=nginx state=stopped
+  ignore_errors: true
+
+- name: install nginx
+  sudo: True
+  yum: pkg=nginx state=installed
+  tags: packages
+
+

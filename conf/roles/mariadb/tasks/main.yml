@@ -1,0 +1,54 @@
+---
+# file: roles/mariadb/tasks/main.yml
+# Configure MariaDB directly from mariadb.com official repository
+#
+# @see https://mariadb.com/kb/en/installing-mariadb-with-yum/
+# tags: packages
+#
+
+
+#- name: stop MariaDB service, if any
+#  sudo: True
+#  action: service name=mysql state=stopped
+#  ignore_errors: true
+
+
+- name: precondition - mariadb_version
+  fail: msg="ERROR - required variable 'mariadb_version' missing."
+  when: mariadb_version is not defined
+
+
+- name: add mariadb.com to yum's repo list
+  sudo: True
+  action: copy src=../files/mariadb.repo dest=/etc/yum.repos.d/ owner=root group=root mode=0644
+
+#=================================
+
+
+- name: check if MariaDB is installed?
+  action: script ../files/check-mariadb-version.sh
+  register: mariadb_info
+
+- include: install-mariadb.yml
+  when: mariadb_info.stdout < mariadb_version
+
+
+
+#--------------------------------------#
+# configure MariaDB as service
+#
+
+
+#- name: copy to /etc/init.d
+#  sudo: True
+#  action: copy src=../files/init-mysql.sh dest=/etc/rc.d/init.d/mysql owner=root group=root mode=0755
+
+- name: chkconfig
+  sudo: True
+  action: shell chkconfig --add mysql
+  action: shell chkconfig --level 345 mysql on
+
+- name: start MariaDB
+  sudo: True
+  action: service name=mysql state=started enabled=yes
+

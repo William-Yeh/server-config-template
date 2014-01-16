@@ -1,0 +1,10 @@
+---
+# file: roles/nodejs/tasks/main.yml
+# Configure node.js common settings.
+#
+
+- name: be sure node.js is installed
+  sudo: True
+  yum: pkg=npm state=installed
+  tags: nodejs packages
+ 

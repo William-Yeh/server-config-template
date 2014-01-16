@@ -1,0 +1,22 @@
+---
+# file: roles/common/tasks/python.yml
+# Configure Python basic tools.
+#
+# tags: packages python
+#
+
+- name: install Python, if necessary
+  sudo: True
+  yum: pkg=python state=installed
+  tags: packages python
+
+- name: install easy_install
+  sudo: True
+  yum: pkg=python-setuptools state=installed
+  tags: packages python
+
+- name: install pip
+  sudo: True
+  easy_install: name=pip
+  tags: packages python
+

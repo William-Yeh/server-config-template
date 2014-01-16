@@ -1,0 +1,20 @@
+#
+# convenient alias settings;
+# placed here to be included by bash and zsh.
+#
+# @see http://askubuntu.com/questions/31216/setting-up-aliases-in-zsh
+#
+
+alias dir='ls -al -Gp'
+alias cls='clear'
+alias deletedsstore='find . -name "*.DS_Store" -type f -delete'
+
+
+#
+# show Internet domain socket states
+# original command:
+#   netstat -n | awk '/^tcp/ {++S[$NF]} END {for(a in S) print a, S[a]}' | sort
+#
+alias shownetstat='netstat -n | awk "/^tcp/ {++S[\$NF]} END {for(a in S) print a, S[a]}" | sort'
+
+

@@ -1,0 +1,19 @@
+# dynamic generated or temp directories
+
+
+# exclude sensitive configuration
+staging
+production
+
+
+# test or legacy files
+
+
+
+# generic files to ignore
+*~
+*.lock
+*.DS_Store
+*.swp
+*.out
+.svn

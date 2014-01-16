@@ -1,0 +1,15 @@
+---
+# Redis-related variables
+# bind all network interfaces instead of just "127.0.0.1".
+#
+# @note need to be included explicitly by "vars_file"
+#
+# @see http://stackoverflow.com/questions/8537254/redis-connect-to-remote-server
+#
+
+
+#
+# option
+#
+
+redis_bind_all_interfaces: true

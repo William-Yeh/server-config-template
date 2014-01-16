@@ -1,0 +1,13 @@
+# Logrotate file for Apache Cassandra
+#
+# @location /etc/logrotate.d/cassandra
+# @see http://www.datastax.com/documentation/cassandra/1.2/index.html#cassandra/configuration/configOutputLog_t.html
+# 
+
+/var/log/cassandra/output.log {
+  size 10M
+  rotate 9
+  missingok
+  copytruncate
+  compress
+}

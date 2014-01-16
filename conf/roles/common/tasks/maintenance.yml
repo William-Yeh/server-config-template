@@ -1,0 +1,37 @@
+---
+# file: roles/common/tasks/maintenance.yml
+# Configure useful maintenance tools.
+#
+# [MEMO] CentOS already has logrotate installed by default!
+#
+# tags: packages maintenance
+#
+
+
+#
+# log maintenance tools
+#
+
+- name: install logrotate
+  sudo: True
+  yum: pkg=logrotate state=installed
+  tags: packages maintenance
+
+- name: set directory permission
+  action: file dest=/etc/logrotate.d mode=755 state=directory owner=root group=root
+  sudo: True
+
+- name: copy default logrotate conf file (timestamp=200708291519.36)
+  sudo: True
+  action: copy src=../files/logrotate.conf  dest=/etc/ owner=root group=root mode=0644
+
+
+#
+# diagnosis tools
+#
+
+- name: install htop
+  sudo: True
+  yum: pkg=htop state=installed
+  tags: packages maintenance
+

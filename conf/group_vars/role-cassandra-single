@@ -1,0 +1,21 @@
+---
+# Cassandra-related variables
+#
+# @note need to be included explicitly by "vars_file"
+#
+# @see http://www.screenr.com/5G6
+#
+
+
+#
+# deployment
+#
+
+cassandra_config_path: /etc/cassandra
+
+
+#
+# no ring (single) config
+#
+
+cassandra_seeds: 127.0.0.1

@@ -30,3 +30,9 @@ Currently the following software stacks are provided:
 
 Other software can be added according to given samples.
 
+
+# TODO
+
+1. The use of `$`variable is deprecated.
+
+2. Linode load balancer (aka *NodeBalancer*) support.

@@ -11,11 +11,11 @@ timezone: Asia/Taipei
 
 rpmforge_site: http://pkgs.repoforge.org/rpmforge-release/
 rpmforge_file: rpmforge-release-0.5.3-1.el6.rf.x86_64.rpm
-rpmforge_file_url: ${rpmforge_site}${rpmforge_file}
+rpmforge_file_url: "{{rpmforge_site}}{{rpmforge_file}}"
 
 epel_site: http://dl.fedoraproject.org/pub/epel/6/x86_64/
 epel_file: epel-release-6-8.noarch.rpm
-epel_file_url: ${epel_site}${epel_file}
+epel_file_url: "{{epel_site}}{{epel_file}}"
 
 
 #--------------------------------------#
@@ -28,4 +28,13 @@ ulimit: 102400
 #ulimit: 32768
 
 
+
+#--------------------------------------#
+# optional software
+#
+
+ack_file_url: http://beyondgrep.com/ack-2.12-single-file
+
+authbind_file: authbind-2.1.1-0.x86_64.rpm
+authbind_file_url: "https://github.com/tootedom/authbind-centos-rpm/blob/master/authbind/RPMS/x86_64/{{authbind_file}}?raw=true"
 

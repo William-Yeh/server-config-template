@@ -38,7 +38,7 @@
 
 - name: download ack
   sudo: True
-  action: command creates=/usr/local/bin/ack  curl -L -z /usr/local/bin/ack -o /usr/local/bin/ack  http://beyondgrep.com/ack-2.08-single-file
+  action: command creates=/usr/local/bin/ack  curl -L -z /usr/local/bin/ack -o /usr/local/bin/ack  {{ack_file_url}}
   tags: packages devel
 
 - name: install ack
@@ -103,3 +103,24 @@
   tags: packages devel
 
 
+#
+# authbind
+#
+
+- name: check if authbind is installed
+  sudo: True
+  yum: pkg=authbind state=installed
+  register: authbind_installed
+  ignore_errors: yes
+  tags: packages
+
+- name: fetch authbind .rpm file, if necessary
+  action: get_url url={{authbind_file_url}}  dest=/tmp/{{authbind_file}}
+  when: authbind_installed|failed
+  tags: packages
+
+- name: install authbind, if necessary
+  sudo: True
+  action: command creates=/tmp/authbind chdir=/tmp rpm --force -Uvh  /tmp/{{authbind_file}}
+  when: authbind_installed|failed
+  tags: packages

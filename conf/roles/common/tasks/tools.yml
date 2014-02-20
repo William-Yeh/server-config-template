@@ -22,6 +22,21 @@
 
 
 #
+# glibc
+#
+
+- name: install glibc stuff
+  sudo: True
+  yum: pkg=glibc          state=installed
+  yum: pkg=glibc-common   state=installed
+  yum: pkg=glibc-devel    state=installed
+  yum: pkg=glibc-static   state=installed
+  yum: pkg=glibc-headers  state=installed
+  tags: packages devel
+
+
+
+#
 # make
 #
 

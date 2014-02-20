@@ -21,7 +21,6 @@
   tags: packages net
 
 
-
 #
 # make
 #
@@ -104,7 +103,7 @@
 
 
 #
-# authbind
+# authbind: bind sockets to privileged ports without root
 #
 
 - name: check if authbind is installed

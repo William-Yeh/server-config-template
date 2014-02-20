@@ -18,6 +18,17 @@
 
 
 #-------------------------------------#
+# RPM tools
+#
+
+- name: install rpm-build & rpmdevtools
+  sudo: True
+  yum: pkg=rpm-build   state=installed
+  yum: pkg=rpmdevtools state=installed
+  tags: packages
+
+
+#-------------------------------------#
 # RPMforge
 #
 

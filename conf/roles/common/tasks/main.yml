@@ -15,3 +15,5 @@
 - include: perl.yml
 - include: python.yml
 - include: monitors.yml
+
+- include: benchmark.yml

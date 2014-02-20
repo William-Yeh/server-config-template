@@ -1,0 +1,22 @@
+---
+# file: roles/common/tasks/benchmark.yml
+# Configure CentOS useful benchmark tools for developers.
+#
+# tags: packages benchmark devel
+#
+
+
+#
+# net tools
+#
+
+- name: install ApacheBench (ab)
+  sudo: True
+  yum: pkg=httpd-tools state=installed
+  tags: packages benchmark devel
+
+
+- name: copy ab+.sh tool
+  sudo: True
+  copy: src=../files/ab+.sh  dest=/usr/local/bin owner=root group=root mode=0755
+  tags: packages benchmark devel

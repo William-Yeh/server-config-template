@@ -1,0 +1,40 @@
+#
+# monit conf file.
+# location: /etc/monit.d/
+#
+
+check process app-one
+  with pidfile /var/run/weblogger/app-one.pid
+
+  start program = "/etc/init.d/app-one  start"
+           as uid {{APP_DEPLOYER}} and gid wheel 
+           with timeout 30 seconds
+  stop  program = "/etc/init.d/app-one  stop"
+           as uid {{APP_DEPLOYER}} and gid wheel 
+  #stop program = "/usr/bin/pkill -f app-one.js"
+
+  #if failed port 3000 protocol HTTP
+  #  request /images/1x1.gif
+  #  with timeout 5 seconds
+  #  then restart
+
+
+#------------------
+
+#  check process apache with pidfile /usr/local/apache/logs/httpd.pid
+#    start program = "/etc/init.d/httpd start" with timeout 60 seconds
+#    stop program  = "/etc/init.d/httpd stop"
+#    if cpu > 60% for 2 cycles then alert
+#    if cpu > 80% for 5 cycles then restart
+#    if totalmem > 200.0 MB for 5 cycles then restart
+#    if children > 250 then restart
+#    if loadavg(5min) greater than 10 for 8 cycles then stop
+#    if failed host www.tildeslash.com port 80 protocol http
+#       and request "/somefile.html"
+#       then restart
+#    if failed port 443 type tcpssl protocol http
+#       with timeout 15 seconds
+#       then restart
+#    if 3 restarts within 5 cycles then timeout
+#    depends on apache_bin
+#    group server

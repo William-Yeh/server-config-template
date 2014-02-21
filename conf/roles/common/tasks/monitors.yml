@@ -10,13 +10,32 @@
 # monitoring tools
 #
 
-- name: install upstart
+#- name: install upstart
+#  sudo: True
+#  yum: pkg=upstart state=installed
+#  tags: packages monitor
+
+
+- name: install monit
   sudo: True
-  yum: pkg=upstart state=installed
+  yum: pkg=monit state=installed
   tags: packages monitor
 
-#- name: install monit
+- name: enable monit service
+  sudo: True
+  service: name=monit state=started enabled=yes
+  tags: packages monitor
+
+- name: logrotate for monit
+  sudo: True
+  action: copy src=../files/monit.logrotate dest=/etc/logrotate.d/monit owner=root group=root mode=0644
+  tags: packages monitor
+
+
+#
+# install Runit via pre-generated RPM
+# @see https://github.com/imeyer/runit-rpm
+#
+#- name: install Runit
 #  sudo: True
-#  yum: pkg=monit state=installed
-#  tags: packages monitor
 

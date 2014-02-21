@@ -26,6 +26,6 @@
 
 - name: be sure ntpd is running and enabled
   sudo: True
-  service: name=ntpd state=running enabled=yes
+  service: name=ntpd state=started enabled=yes
   tags: time ntp packages
 

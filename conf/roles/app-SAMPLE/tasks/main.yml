@@ -44,25 +44,57 @@
 
 
 #--------------------------------------#
-# configure 
+# configure for log
 #
 
 - name: create log directory
   sudo: True
-  file: dest=/var/log/SAMPLE  owner=$APP_DEPLOYER group=wheel mode=755 state=directory
-
+  file: dest=/var/log/SAMPLE  owner={{APP_DEPLOYER}}  group=wheel mode=755 state=directory
 
 - name: logrotate for app-SAMPLE logs
   sudo: True
-  copy: src=../files/SAMPLE.logrotate dest=/etc/logrotate.d/SAMPLE owner=$APP_DEPLOYER group=wheel mode=0644
-
+  copy: src=../files/SAMPLE.logrotate dest=/etc/logrotate.d/SAMPLE owner={{APP_DEPLOYER}}  group=wheel mode=0644
 
 - name: force logrotate to read config file immediately
   sudo: True
   command: logrotate -v /etc/logrotate.conf
+  ignore_errors: true
+
+
+#--------------------------------------#
+# configure for PID file location
+#
+
+- name: create /var/run directory
+  sudo: True
+  file: dest=/var/run/SAMPLE  owner={{APP_DEPLOYER}}  group=wheel mode=755 state=directory
+
+
+#--------------------------------------#
+# configure for INIT mechanism
+#
+
+- name: copy to /etc/init.d
+  sudo: True
+  copy: src=../files/init-SAMPLE.sh dest=/etc/rc.d/init.d/SAMPLE owner=root group=root mode=0755
+
+
+#--------------------------------------#
+# configure for monit mechanism
+#
+
+- name: configure monit
+  sudo: True
+  template: src=../templates/SAMPLE.conf.j2 dest=/etc/monit.d/SAMPLE.conf  owner={{APP_DEPLOYER}} group=wheel mode=0644
+
+
+#- name: restart monit service, if necessary
+#  sudo: True
+#  service: name=monit state=restarted enabled=yes
 
 
 
+#----------------------------
 #
 # TODO copy files/*-for-nginx.conf to nginx
 # TODO restart nginx

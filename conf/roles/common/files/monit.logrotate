@@ -1,0 +1,22 @@
+# Logrotate file for monit
+#
+# @location /etc/logrotate.d/monit
+# @see http://mmonit.com/wiki/Monit/ConfigurationExamples#logrotate
+# @see http://nongnu.13855.n7.nabble.com/monit-logfile-and-logrotate-td1829.html
+#
+
+/var/log/monit  /var/log/monit.log {
+  size 10M
+  rotate 9
+  missingok
+  copytruncate
+  compress
+  delaycompress
+  notifempty
+  sharedscripts
+  postrotate
+    monit reload
+    #/bin/kill -HUP `cat /var/run/monit.pid 2>/dev/null` 2> /dev/null || true
+  endscript
+}
+

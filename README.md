@@ -19,6 +19,7 @@ Currently the following software stacks are provided:
   - ant
 
 - DB
+  - mongodb
   - mariadb
   - cassandra
   - redis

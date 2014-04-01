@@ -1,6 +1,6 @@
 ---
-# file: roles/common/tasks/centos6_x64-limit.yml
-# Configure CentOS resource limits.
+# file: roles/common/tasks/limit.yml
+# Configure Linux resource limits.
 #
 # @see "Recommended production settings" provided by DataStax Cassandra:
 #      http://www.datastax.com/documentation/cassandra/1.2/index.html#cassandra/install/installRecommendSettings.html
@@ -37,6 +37,7 @@
 - name: increase the number of user's processes
   sudo: True
   action: lineinfile dest=/etc/security/limits.d/90-nproc.conf regexp='^\*\s+soft' line='*          soft    nproc     10240' state=present backup=yes
+  when: ansible_pkg_mgr == "yum"
 
 
 #

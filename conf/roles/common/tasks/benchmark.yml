@@ -12,8 +12,16 @@
 
 - name: install ApacheBench (ab)
   sudo: True
-  yum: pkg=httpd-tools state=installed
+  yum: name=httpd-tools state=present
+  when: ansible_pkg_mgr == "yum"
   tags: packages benchmark devel
+
+- name: install ApacheBench (ab)
+  sudo: True
+  apt: pkg=apache2-utils state=present
+  when: ansible_pkg_mgr == "apt"
+  tags: packages benchmark devel
+
 
 
 - name: copy ab+.sh tool

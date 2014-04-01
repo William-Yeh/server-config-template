@@ -2,7 +2,7 @@
 # file: roles/common/tasks/maintenance.yml
 # Configure useful maintenance tools.
 #
-# [MEMO] CentOS already has logrotate installed by default!
+# [MEMO] CentOS 6 and Debian 7 already has logrotate installed by default!
 #
 # tags: packages maintenance
 #
@@ -14,16 +14,37 @@
 
 - name: install logrotate
   sudo: True
-  yum: pkg=logrotate state=installed
+  yum: name=logrotate state=present
+  when: ansible_pkg_mgr == "yum"
   tags: packages maintenance
 
-- name: set directory permission
-  action: file dest=/etc/logrotate.d mode=755 state=directory owner=root group=root
+- name: install logrotate
   sudo: True
+  apt: pkg=logrotate state=present
+  when: ansible_pkg_mgr == "apt"
+  tags: packages maintenance
+
+
+
+- name: set directory permission
+  sudo: True
+  file: dest=/etc/logrotate.d mode=755 state=directory owner=root group=root
 
 - name: copy default logrotate conf file (timestamp=200708291519.36)
   sudo: True
-  action: copy src=../files/logrotate.conf  dest=/etc/ owner=root group=root mode=0644
+  copy: src=../files/logrotate.conf  dest=/etc/ owner=root group=root mode=0644
+
+
+#
+# chkconfig-like UI utils for Debian/Ubuntu
+#
+
+- name: install sysv-rc-conf
+  sudo: True
+  apt: pkg=sysv-rc-conf state=present
+  when: ansible_pkg_mgr == "apt"
+  tags: packages maintenance
+
 
 
 #
@@ -32,6 +53,13 @@
 
 - name: install htop
   sudo: True
-  yum: pkg=htop state=installed
+  yum: name=htop state=present
+  when: ansible_pkg_mgr == "yum"
+  tags: packages maintenance
+
+- name: install htop
+  sudo: True
+  apt: pkg=htop state=present
+  when: ansible_pkg_mgr == "apt"
   tags: packages maintenance
 

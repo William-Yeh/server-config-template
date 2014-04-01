@@ -1,16 +1,37 @@
 ---
 # file: roles/common/tasks/main.yml
-# Configure CentOS common settings.
+# Configure common settings for Linux operating systems.
 #
 
-- include: centos6_x64-time.yml
+- include: time.yml
+- include: limit.yml
+
+- include: debian-locale.yml
+  when: ansible_pkg_mgr == "apt"
+
+
+
 - include: centos6_x64-yum.yml
-- include: centos6_x64-limit.yml
-- include: centos6_x64-disable-services.yml
-#- include: centos6_x64-sudo.yml
+  when: ansible_os_family == "CentOS"
+
+- include: debian-apt.yml
+  when: ansible_pkg_mgr == "apt"
+
+
+
+
+
+- include: disable-services.yml
+
+###- include: centos6_x64-sudo.yml
+###  when: ansible_os_family == "CentOS"
+
+
+
+
+
 
 - include: maintenance.yml
-
 - include: tools.yml
 - include: perl.yml
 - include: python.yml

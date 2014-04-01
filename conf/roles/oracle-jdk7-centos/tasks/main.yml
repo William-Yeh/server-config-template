@@ -1,8 +1,7 @@
 ---
-# file: roles/oracle-jdk7/tasks/main.yml
+# file: roles/oracle-jdk7-centos/tasks/main.yml
 # Configure Oracle JDK common settings.
 #
-
 
 - name: precondition - jdk_version
   fail: msg="ERROR - required variable 'jdk_version' missing."
@@ -17,6 +16,7 @@
 
 - include: install-jdk.yml
   when: jdk_info.stdout < jdk_version
+
 
 
 - name: update /etc/alternatives settings

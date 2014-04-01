@@ -1,0 +1,73 @@
+---
+# file: roles/common/tasks/time.yml
+# Configure Linux time-related settings.
+#
+# @see https://coderwall.com/p/hdul2g
+#
+# tags: time ntp
+#
+
+- name: set time zone to given $timezone
+  sudo: True
+  command: cp -p /usr/share/zoneinfo/{{timezone}}  /etc/localtime 
+  when: ansible_pkg_mgr == "yum"  and  timezone is defined
+  tags: time
+
+- name: set time zone to GMT+8
+  sudo: True
+  command: cp -p /usr/share/zoneinfo/Asia/Taipei  /etc/localtime
+  when: ansible_pkg_mgr == "yum"  and  timezone is not defined
+  tags: time
+
+
+
+
+- name: set time zone to given $timezone
+  sudo: True
+  shell: echo "{{timezone}}"  > /etc/timezone 
+  when: ansible_pkg_mgr == "apt"  and  timezone is defined
+  tags: time
+
+- name: set time zone to GMT+8
+  sudo: True
+  shell: echo "Asia/Taipei"   > /etc/timezone
+  when: ansible_pkg_mgr == "apt"  and  timezone is not defined
+  tags: time
+
+- name: permanently reset timezone info
+  sudo: True
+  command: dpkg-reconfigure -f noninteractive tzdata
+  when: ansible_pkg_mgr == "apt"
+  tags: time
+
+
+
+
+
+
+- name: be sure ntp is installed
+  sudo: True
+  yum: name=ntp state=present
+  when: ansible_pkg_mgr == "yum"
+  tags: time ntp packages
+
+- name: be sure ntp is installed
+  sudo: True
+  apt: pkg=ntp state=present
+  when: ansible_pkg_mgr == "apt"
+  tags: time ntp packages
+
+
+
+- name: be sure ntpd is running and enabled
+  sudo: True
+  service: name=ntpd state=started enabled=yes
+  when: ansible_pkg_mgr == "yum"
+  tags: time ntp packages
+
+- name: be sure ntpd is running and enabled
+  sudo: True
+  service: name=ntp state=started enabled=yes
+  when: ansible_pkg_mgr == "apt"
+  tags: time ntp packages
+

@@ -1,8 +1,10 @@
 # inventory file for development environment
 #
 # sample usage:
-#   $ ansible-playbook -i development -u vagrant -k -vvv site.yml 
+#   $ ansible-playbook -u vagrant -k -vvv -i development  site.yml 
+#   $ ansible-as-sudo     vagrant         -i development  site.yml 
 #
+
 
 [vagrant]
 127.0.0.1 ansible_ssh_port=2222

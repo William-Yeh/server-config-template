@@ -7,16 +7,43 @@
 
 - name: install Python, if necessary
   sudo: True
-  yum: pkg=python state=installed
+  yum: name=python state=present
+  when: ansible_pkg_mgr == "yum"
+  tags: packages python
+
+- name: install Python, if necessary
+  sudo: True
+  apt: pkg=python state=present
+  when: ansible_pkg_mgr == "apt"
+  tags: packages python
+
+
+
+- name: install easy_install
+  sudo: True
+  yum: name=python-setuptools state=present
+  when: ansible_pkg_mgr == "yum"
   tags: packages python
 
 - name: install easy_install
   sudo: True
-  yum: pkg=python-setuptools state=installed
+  apt: pkg=python-setuptools state=present
+  when: ansible_pkg_mgr == "apt"
   tags: packages python
 
-- name: install pip
+
+
+- name: install pip (by easy_install)
   sudo: True
   easy_install: name=pip
+  when: ansible_pkg_mgr == "yum"
   tags: packages python
+
+- name: install pip (for Debian/Ubuntu)
+  sudo: True
+  apt: pkg=python-pip state=present
+  when: ansible_pkg_mgr == "apt"
+  tags: packages python
+
+
 

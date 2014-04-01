@@ -1,5 +1,5 @@
 #
-# install Oracle JDK 1.7
+# install Oracle JDK 1.7 on CentOS
 #
 # Adapted from: http://blog.trifork.com/2013/04/02/ansible-example-playbook-to-setup-jenkins-slave/
 # See also: http://java.dzone.com/articles/installing-oracle-java6-ubuntu

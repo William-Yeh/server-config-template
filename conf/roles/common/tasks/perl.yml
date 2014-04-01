@@ -7,12 +7,28 @@
 
 - name: install Perl, if necessary
   sudo: True
-  yum: pkg=perl state=installed
+  yum: name=perl state=present
+  when: ansible_pkg_mgr == "yum"
   tags: packages perl
 
-- name: install CPAN
+- name: install Perl, if necessary
   sudo: True
-  yum: pkg=perl-CPAN state=installed
+  apt: pkg=perl state=present
+  when: ansible_pkg_mgr == "apt"
+  tags: packages perl
+
+
+
+- name: install core Perl modules (for Debian)
+  sudo: True
+  apt: pkg=perl-modules state=present
+  when: ansible_pkg_mgr == "apt"
+  tags: packages perl
+
+- name: install CPAN (for CentOS)
+  sudo: True
+  yum: pkg=perl-CPAN state=present
+  when: ansible_pkg_mgr == "yum"
   tags: packages perl
 
 

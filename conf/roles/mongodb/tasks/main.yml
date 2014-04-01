@@ -1,0 +1,10 @@
+---
+# file: roles/mongodb/tasks/main.yml
+# Configure MariaDB directly from mariadb.com official repository
+#
+#
+
+- name: install MongoDB
+  sudo: True
+  apt: pkg=mongodb-10gen state=present
+  when: ansible_os_family == "Debian"

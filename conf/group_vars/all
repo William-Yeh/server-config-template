@@ -19,7 +19,7 @@ epel_file_url: "{{epel_site}}{{epel_file}}"
 
 
 #--------------------------------------#
-# CentOS resource limits
+# resource limits
 #
 
 # recommended by DataStax Cassandra

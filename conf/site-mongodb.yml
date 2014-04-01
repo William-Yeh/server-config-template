@@ -1,13 +1,13 @@
 ---
-# file: site-web.yml
-# playbook for web tier
+# file: site-mongodb.yml
+# playbook for MongoDB tier
 #
 
 - hosts: all
 
-  vars_files:
-    - group_vars/role-nginx
-    - group_vars/role-redis
+  #vars_files:
+    #- group_vars/role-nginx
+    #- group_vars/role-redis
     #- group_vars/role-oracle-jdk7
     #- group_vars/role-ant
     #- group_vars/role-mariadb
@@ -16,12 +16,13 @@
 
   roles:
     - common
-    - nginx
-    - nodejs
-    - redis
-    #- { role: oracle-jdk7-centos, when: ansible_os_family == "CentOS" }
+    #- nginx
+    #- nodejs
+    #- redis
     #- { role: oracle-jdk7-debian, when: ansible_os_family == "Debian" }
+    #- { role: oracle-jdk7-centos, when: ansible_os_family == "CentOS" }
     #- ant
+    - mongodb
     #- mariadb
     #- cassandra
 

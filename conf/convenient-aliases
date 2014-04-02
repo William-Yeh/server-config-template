@@ -1,2 +1,4 @@
-alias ansible-as-root='ansible-playbook -c paramiko -k -vvv -u root '
-alias ansible-as-sudo='ansible-playbook -c paramiko -k -vvv -u '
+alias ansible-as-root='ansible-playbook  -c paramiko -k -vvv -u root '
+alias ansible-as-sudo='ansible-playbook  -c paramiko -k -vvv -u '
+alias ansible-with-key='ansible-playbook -c paramiko    -vvv --private-key '
+

@@ -15,6 +15,20 @@
   sudo: True
   command: /usr/sbin/locale-gen
 
+
+- name: ensure /etc/default/locale exist
+  sudo: True
+  file: path=/etc/default/locale owner=root group=root mode=0644 state=touch
+
+
+- name: set time-related messages to English
+  sudo: True
+  lineinfile: dest=/etc/default/locale  state=present  regexp=''  line='{{ item }}'
+  with_items:
+   - 'LC_TIME=en_US.UTF-8'
+
+
+
 #- name: re-configure locales
 #  sudo: True
 #  command: /usr/sbin/dpkg-reconfigure  locales

@@ -36,9 +36,11 @@
 
 - include: disable-services.yml
 
+- include: security.yml
+
+
 ###- include: centos6_x64-sudo.yml
 ###  when: ansible_os_family == "CentOS"
-
 
 
 

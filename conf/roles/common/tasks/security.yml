@@ -1,0 +1,13 @@
+---
+# file: roles/common/tasks/security.yml
+# Configure Linux security.
+#
+# tags: packages security
+#
+
+
+- name: install unattended-upgrades - automatic installation of security upgrades
+  sudo: True
+  apt: pkg=unattended-upgrades state=present
+  when: ansible_pkg_mgr == "apt"
+  tags: packages security

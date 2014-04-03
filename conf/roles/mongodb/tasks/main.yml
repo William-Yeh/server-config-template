@@ -6,5 +6,5 @@
 
 - name: install MongoDB
   sudo: True
-  apt: pkg=mongodb-10gen state=present
+  apt: pkg=mongodb-10gen state=present force=yes
   when: ansible_os_family == "Debian"

@@ -9,9 +9,8 @@
 
 - name: provides the add-apt-repository binary
   sudo: True
-  apt: name={{ item }}  state=latest update_cache=yes
-  with_items:
-    - python-software-properties
+  apt: name=python-software-properties  state=present update_cache=yes
+
 
 
 
@@ -46,13 +45,14 @@
 
 
 
+- name: Import MongoDB PGP key
+  sudo: True
+  command: apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 7F0CEB10
+
 - name: add the MongoDB PPA repository
   sudo: True
   apt_repository: repo="deb http://downloads-distro.mongodb.org/repo/debian-sysvinit dist 10gen" state=present
 
-#- name: Import MongoDB PGP key
-#  sudo: True
-#  command: apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 7F0CEB10
 #
 #- name: add the MongoDB PPA repository
 #  sudo: True
@@ -66,5 +66,4 @@
 - name: Run the equivalent of "apt-get update" as a separate step
   sudo: True
   apt: update_cache=yes
-  when: ansible_pkg_mgr == "apt"
   tags: packages

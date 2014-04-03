@@ -13,6 +13,10 @@
 
 
 
+- name: Import WebUpd8 PGP key
+  sudo: True
+  command: apt-key adv --keyserver keyserver.ubuntu.com --recv-keys EEA14886
+
 
 - name: add the WebUpd8 Oracle Java PPA repository (for Ubuntu)
   sudo: True
@@ -29,11 +33,6 @@
   apt_repository: repo="deb-src http://ppa.launchpad.net/webupd8team/java/ubuntu precise main" state=present
   when: ansible_os_family == "Debian"
 
-
-
-#- name: Import WebUpd8 PGP key
-#  sudo: True
-#  command: apt-key adv --keyserver keyserver.ubuntu.com --recv-keys EEA14886
 #
 #- name: add the WebUpd8 Oracle Java PPA repository
 #  sudo: True

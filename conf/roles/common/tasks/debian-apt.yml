@@ -7,28 +7,57 @@
 #
 
 
-- name: Import WebUpd8 PGP key
+- name: provides the add-apt-repository binary
   sudo: True
-  command: apt-key adv --keyserver keyserver.ubuntu.com --recv-keys EEA14886
+  apt: name={{ item }}  state=latest update_cache=yes
+  with_items:
+    - python-software-properties
 
-- name: add the WebUpd8 Oracle Java PPA repository
+
+
+- name: add the WebUpd8 Oracle Java PPA repository (for Ubuntu)
   sudo: True
-  shell: echo "deb http://ppa.launchpad.net/webupd8team/java/ubuntu precise main"     | tee /etc/apt/sources.list.d/webupd8team-java.list
+  apt_repository: repo=ppa:webupd8team/java state=present
+  when: ansible_os_family == "Ubuntu"
 
-- name: add the WebUpd8 Oracle Java PPA repository
+- name: add the WebUpd8 Oracle Java PPA repository (for Debian)
   sudo: True
-  shell: echo "deb-src http://ppa.launchpad.net/webupd8team/java/ubuntu precise main" | tee -a /etc/apt/sources.list.d/webupd8team-java.list
+  apt_repository: repo="deb http://ppa.launchpad.net/webupd8team/java/ubuntu precise main" state=present
+  when: ansible_os_family == "Debian"
 
-
-
-
-- name: Import MongoDB PGP key
+- name: add the WebUpd8 Oracle Java PPA repository (for Debian)
   sudo: True
-  command: apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 7F0CEB10
+  apt_repository: repo="deb-src http://ppa.launchpad.net/webupd8team/java/ubuntu precise main" state=present
+  when: ansible_os_family == "Debian"
+
+
+
+#- name: Import WebUpd8 PGP key
+#  sudo: True
+#  command: apt-key adv --keyserver keyserver.ubuntu.com --recv-keys EEA14886
+#
+#- name: add the WebUpd8 Oracle Java PPA repository
+#  sudo: True
+#  shell: echo "deb http://ppa.launchpad.net/webupd8team/java/ubuntu precise main"     | tee /etc/apt/sources.list.d/webupd8team-java.list
+#
+#- name: add the WebUpd8 Oracle Java PPA repository
+#  sudo: True
+#  shell: echo "deb-src http://ppa.launchpad.net/webupd8team/java/ubuntu precise main" | tee -a /etc/apt/sources.list.d/webupd8team-java.list
+
+
 
 - name: add the MongoDB PPA repository
   sudo: True
-  shell: echo "deb http://downloads-distro.mongodb.org/repo/debian-sysvinit dist 10gen" | tee /etc/apt/sources.list.d/mongodb.list
+  apt_repository: repo="deb http://downloads-distro.mongodb.org/repo/debian-sysvinit dist 10gen" state=present
+
+#- name: Import MongoDB PGP key
+#  sudo: True
+#  command: apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 7F0CEB10
+#
+#- name: add the MongoDB PPA repository
+#  sudo: True
+#  shell: echo "deb http://downloads-distro.mongodb.org/repo/debian-sysvinit dist 10gen" | tee /etc/apt/sources.list.d/mongodb.list
+
 
 
 

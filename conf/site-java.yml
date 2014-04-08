@@ -7,6 +7,7 @@
 
   vars_files:
     #- group_vars/role-nginx
+    #- group_vars/role-nodejs
     #- group_vars/role-redis
     - group_vars/role-oracle-jdk7
     - group_vars/role-ant

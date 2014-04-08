@@ -1,0 +1,9 @@
+#
+# location: /etc/profile.d
+# purpose: install nvm so all users can use it
+#
+# @see http://stackoverflow.com/a/19040346
+#
+
+export NVM_DIR={{ nodejs_install_path }}
+source {{ nvm_exe_path }}

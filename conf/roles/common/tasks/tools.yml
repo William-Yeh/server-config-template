@@ -108,6 +108,18 @@
   tags: packages devel
 
 
+
+#
+#
+#
+
+- name: install unzip
+  sudo: True
+  apt: pkg=unzip state=present
+  when: ansible_pkg_mgr == "apt"
+  tags: packages devel
+
+
 #
 # pigz: Parallel Implementation of GZip
 #

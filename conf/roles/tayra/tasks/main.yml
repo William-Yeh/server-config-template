@@ -1,0 +1,31 @@
+---
+# file: roles/tayra/tasks/main.yml
+# Configure Tayra common settings.
+#
+
+- name: precondition - tayra_version
+  fail: msg="ERROR - required variable 'tayra_version' missing."
+  when: tayra_version is not defined
+
+
+
+- name: set path permission
+  sudo: True
+  action: file dest={{ tayra_install_path }}    mode=755 state=directory
+
+- name: get tarball
+  copy: src="../files/{{ tayra_tarball_file }}"  dest="{{ tayra_download_path }}/{{ tayra_tarball_file }}"
+  #get_url: url={{ tayra_tarball_url }}  dest="{{ tayra_download_path }}/{{ tayra_tarball_file }}"
+
+
+- name: unzip and defeather
+  sudo: True
+  action: command  chdir={{ tayra_download_path }}  unzip  -u {{ tayra_tarball_file }}  -d {{ tayra_install_path }}
+
+- name: set exe permission
+  sudo: True
+  file: path="{{ tayra_install_path }}/{{ item }}"  mode=0755 state=file
+  with_items:
+    - backup.sh
+    - restore.sh
+

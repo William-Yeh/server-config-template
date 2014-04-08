@@ -1,0 +1,31 @@
+---
+# file: site-mongodb-tools.yml
+# playbook for MongoDB tools tier
+#
+
+- hosts: all
+
+  vars_files:
+    #- group_vars/role-nginx
+    #- group_vars/role-redis
+    - group_vars/role-oracle-jdk7
+    #- group_vars/role-ant
+    - group_vars/role-tayra
+    #- group_vars/role-mariadb
+    #- group_vars/role-cassandra-ring
+    #- group_vars/role-cassandra-single
+
+  roles:
+    - common
+    #- nginx
+    #- nodejs
+    #- redis
+    - { role: oracle-jdk7-debian, when: ansible_os_family == "Debian" }
+    #- { role: oracle-jdk7-centos, when: ansible_os_family == "CentOS" }
+    - { role: ant-debian, when: ansible_os_family == "Debian" }
+    #- { role: ant-centos, when: ansible_os_family == "CentOS" }
+    - mongodb
+    - tayra
+    #- mariadb
+    #- cassandra
+

@@ -9,6 +9,24 @@
 
 
 #
+# LVM (Linux Volume Manager) - userland logical volume management tools
+#
+
+- name: install lvm2
+  sudo: True
+  yum: name=lvm2 state=present
+  when: ansible_pkg_mgr == "yum"
+  tags: packages maintenance
+
+- name: install lvm2
+  sudo: True
+  apt: pkg=lvm2 state=present
+  when: ansible_pkg_mgr == "apt"
+  tags: packages maintenance
+
+
+
+#
 # log maintenance tools
 #
 

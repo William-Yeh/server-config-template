@@ -10,6 +10,13 @@
 # net tools
 #
 
+- name: install nslookup
+  sudo: True
+  apt: pkg=dnsutils state=present
+  when: ansible_pkg_mgr == "apt"
+  tags: packages net
+
+
 - name: install curl
   sudo: True
   yum: name=curl state=present

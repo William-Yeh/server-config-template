@@ -50,6 +50,7 @@
 - include: tools.yml
 - include: perl.yml
 - include: python.yml
+- include: memory.yml
 - include: monitors.yml
 
 - include: benchmark.yml

@@ -1,0 +1,32 @@
+---
+# file: roles/mms-agent/tasks/main.yml
+# Configure the MMS Monitoring Agent for monitoring MongoDB performance
+#
+# @see http://mms.mongodb.com/help/tutorial/install-monitoring-agent/
+#
+
+- name: precondition - mms_api_key
+  fail: msg="ERROR - required variable 'mms_api_key' missing."
+  when: mms_api_key is not defined
+
+
+
+
+- name: get MMS-Agent .deb file
+  action: get_url url={{ mms_deb_url }} dest={{ mms_download_path }}/{{ mms_deb_file }}
+  when: ansible_pkg_mgr == "apt"
+
+- name: install MMS-Agent
+  sudo: True
+  apt: deb={{ mms_download_path }}/{{ mms_deb_file }}  state=installed
+  when: ansible_pkg_mgr == "apt"
+
+- name: copy init.d for Debian
+  sudo: True
+  template: src=../templates/init-mongodb-mms-monitoring-agent.sh.j2 dest=/etc/init.d/mongodb-mms-monitoring-agent owner=root group=root mode=755
+  when: ansible_os_family == "Debian"
+
+- name: set API key
+  sudo: True
+  lineinfile: dest={{ mms_config_file }} regexp="^mmsApiKey=" line="mmsApiKey={{ mms_api_key }}" state=present
+

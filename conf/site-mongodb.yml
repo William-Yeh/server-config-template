@@ -5,12 +5,14 @@
 
 - hosts: all
 
-  #vars_files:
+  vars_files:
     #- group_vars/role-nginx
+    #- group_vars/role-nodejs
     #- group_vars/role-redis
     #- group_vars/role-oracle-jdk7
     #- group_vars/role-ant
     #- group_vars/role-mariadb
+    - group_vars/role-mms-agent
     #- group_vars/role-cassandra-ring
     #- group_vars/role-cassandra-single
 
@@ -23,6 +25,7 @@
     #- { role: oracle-jdk7-centos, when: ansible_os_family == "CentOS" }
     #- ant
     - mongodb
+    - mms-agent
     #- mariadb
     #- cassandra
 

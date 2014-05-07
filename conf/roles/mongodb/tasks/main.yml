@@ -1,6 +1,6 @@
 ---
 # file: roles/mongodb/tasks/main.yml
-# Configure MariaDB directly from mariadb.com official repository
+# Configure MongoDB directly from mongodb.com official repository
 #
 #
 

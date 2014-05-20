@@ -12,6 +12,11 @@
   yum: pkg=yum-priorities state=installed
   tags: packages
 
+- name: install libselinux-python for selinux-default instances, if any (e.g., Google Compute Engine).
+  sudo: True
+  yum: pkg=libselinux-python state=installed
+  tags: packages
+
 - name: set CentOS base priorities to highest
   sudo: True
   action: copy src=../files/CentOS-Base.repo dest=/etc/yum.repos.d/ owner=root group=root mode=0644
@@ -38,15 +43,15 @@
   register: rpmforge_installed
   ignore_errors: yes
   tags: packages
-  
+
 - name: fetch RPMforge .rpm file, if necessary
-  action: get_url url=${rpmforge_file_url}  dest=/tmp/${rpmforge_file}
+  action: get_url url={{ rpmforge_file_url }}  dest=/tmp/{{ rpmforge_file }}
   when: rpmforge_installed|failed
   tags: packages
 
 - name: install RPMforge, if necessary
   sudo: True
-  action: command creates=/tmp/rpmforge chdir=/tmp rpm --force -Uvh  /tmp/${rpmforge_file}
+  action: command creates=/tmp/rpmforge chdir=/tmp rpm --force -Uvh  /tmp/{{ rpmforge_file }}
   when: rpmforge_installed|failed
   tags: packages
 
@@ -65,15 +70,15 @@
   register: epel_installed
   ignore_errors: yes
   tags: packages
- 
+
 - name: fetch EPEL .rpm file, if necessary
-  action: get_url url=${epel_file_url}  dest=/tmp/${epel_file}
+  action: get_url url={{ epel_file_url }}  dest=/tmp/{{ epel_file }}
   when: epel_installed|failed
   tags: packages
 
 - name: install EPEL, if necessary
   sudo: True
-  action: command creates=/tmp/epel chdir=/tmp rpm --force -Uvh  /tmp/${epel_file}
+  action: command creates=/tmp/epel chdir=/tmp rpm --force -Uvh  /tmp/{{ epel_file }}
   when: epel_installed|failed
   tags: packages
 

@@ -1,6 +1,6 @@
 ---
 # file: roles/common/tasks/monitors.yml
-# Configure CentOS useful tools for monitoring daemon services.
+# Configure useful tools for monitoring daemon services.
 #
 # tags: packages monitor
 #
@@ -18,8 +18,18 @@
 
 - name: install monit
   sudo: True
-  yum: pkg=monit state=installed
+  yum: name=monit state=present
+  when: ansible_pkg_mgr == "yum"
   tags: packages monitor
+
+- name: install monit
+  sudo: True
+  apt: pkg=monit state=present
+  when: ansible_pkg_mgr == "apt"
+  tags: packages monitor
+
+
+
 
 - name: enable monit service
   sudo: True

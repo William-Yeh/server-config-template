@@ -1,6 +1,6 @@
 ---
 # file: roles/common/tasks/tools.yml
-# Configure CentOS useful tools for developers.
+# Configure useful tools for developers.
 #
 # tags: packages net devel
 #
@@ -10,15 +10,38 @@
 # net tools
 #
 
+- name: install nslookup
+  sudo: True
+  apt: pkg=dnsutils state=present
+  when: ansible_pkg_mgr == "apt"
+  tags: packages net
+
+
 - name: install curl
   sudo: True
-  yum: pkg=curl state=installed
+  yum: name=curl state=present
+  when: ansible_pkg_mgr == "yum"
+  tags: packages net
+
+- name: install curl
+  sudo: True
+  apt: pkg=curl state=present
+  when: ansible_pkg_mgr == "apt"
+  tags: packages net
+
+
+- name: install wget
+  sudo: True
+  yum: name=wget state=present
+  when: ansible_pkg_mgr == "yum"
   tags: packages net
 
 - name: install wget
   sudo: True
-  yum: pkg=wget state=installed
+  apt: pkg=wget state=present
+  when: ansible_pkg_mgr == "apt"
   tags: packages net
+
 
 
 #
@@ -27,12 +50,15 @@
 
 - name: install glibc stuff
   sudo: True
-  yum: pkg=glibc          state=installed
-  yum: pkg=glibc-common   state=installed
-  yum: pkg=glibc-devel    state=installed
-  yum: pkg=glibc-static   state=installed
-  yum: pkg=glibc-headers  state=installed
+  yum: name=glibc          state=present
+  yum: name=glibc-common   state=present
+  yum: name=glibc-devel    state=present
+  yum: name=glibc-static   state=present
+  yum: name=glibc-headers  state=present
+  when: ansible_pkg_mgr == "yum"
   tags: packages devel
+
+#TODO for apt?
 
 
 
@@ -42,22 +68,79 @@
 
 - name: install make
   sudo: True
-  yum: pkg=make state=installed
+  yum: name=make state=present
+  when: ansible_pkg_mgr == "yum"
   tags: packages devel
+
+- name: install make
+  sudo: True
+  apt: pkg=make state=present
+  when: ansible_pkg_mgr == "apt"
+  tags: packages devel
+
 
 
 #
 # ack: a better grep optimized for programmers
 #
+# Ubuntu: @see https://github.com/lenniboy/ack-debian-package
+#
+
+- name: install ack ("ack-grep" in Ubuntu)
+  sudo: True
+  apt_repository: repo='ppa:leonard-ehrenfried/ack2'
+  when: ansible_os_family == "Ubuntu"
+  tags: packages devel
+
+- name: install ack ("ack-grep" in Ubuntu)
+  sudo: True
+  apt: pkg=ack-grep update_cache=yes state=present
+  when: ansible_os_family == "Ubuntu"
+  tags: packages devel
+
+
+
+
 
 - name: download ack
   sudo: True
   action: command creates=/usr/local/bin/ack  curl -L -z /usr/local/bin/ack -o /usr/local/bin/ack  {{ack_file_url}}
+  when: ansible_os_family == "CentOS"  or  ansible_os_family == "Debian"
   tags: packages devel
 
 - name: install ack
   sudo: True
   command: /bin/chmod  0755  /usr/local/bin/ack
+  when: ansible_os_family == "CentOS"  or  ansible_os_family == "Debian"
+  tags: packages devel
+
+
+
+#
+#
+#
+
+- name: install unzip
+  sudo: True
+  apt: pkg=unzip state=present
+  when: ansible_pkg_mgr == "apt"
+  tags: packages devel
+
+
+#
+# pigz: Parallel Implementation of GZip
+#
+
+- name: install pigz
+  sudo: True
+  yum: name=pigz state=present
+  when: ansible_pkg_mgr == "yum"
+  tags: packages devel
+
+- name: install pigz
+  sudo: True
+  apt: pkg=pigz state=present
+  when: ansible_pkg_mgr == "apt"
   tags: packages devel
 
 
@@ -67,7 +150,59 @@
 
 - name: install enca
   sudo: True
-  yum: pkg=enca state=installed
+  yum: name=enca state=present
+  when: ansible_pkg_mgr == "yum"
+  tags: packages devel
+
+- name: install enca
+  sudo: True
+  apt: pkg=enca state=present
+  when: ansible_pkg_mgr == "apt"
+  tags: packages devel
+
+
+#
+# git
+#
+
+- name: install git
+  sudo: True
+  yum: name=git state=present
+  when: ansible_pkg_mgr == "yum"
+  tags: packages devel
+
+- name: install git
+  sudo: True
+  apt: pkg=git state=present
+  when: ansible_pkg_mgr == "apt"
+  tags: packages devel
+
+
+
+- name: install gitflow
+  sudo: True
+  yum: name=gitflow state=present
+  when: ansible_pkg_mgr == "yum"
+  tags: packages devel
+
+- name: install git-flow
+  sudo: True
+  apt: pkg=git-flow state=present
+  when: ansible_pkg_mgr == "apt"
+  tags: packages devel
+
+
+
+- name: install git-svn
+  sudo: True
+  yum: name=git-svn state=present
+  when: ansible_pkg_mgr == "yum"
+  tags: packages devel
+
+- name: install git-svn
+  sudo: True
+  apt: pkg=git-svn state=present
+  when: ansible_pkg_mgr == "apt"
   tags: packages devel
 
 
@@ -78,33 +213,24 @@
 
 - name: install subversion
   sudo: True
-  yum: pkg=subversion state=installed
+  yum: name=subversion state=present
+  when: ansible_pkg_mgr == "yum"
   tags: packages devel
+
+- name: install subversion
+  sudo: True
+  apt: pkg=subversion state=present
+  when: ansible_pkg_mgr == "apt"
+  tags: packages devel
+
 
 - name: be sure svnserve is disabled
   sudo: True
   service: name=svnserve state=stopped enabled=no
+  ignore_errors: true
   tags: packages devel
 
 
-#
-# git
-#
-
-- name: install git
-  sudo: True
-  yum: pkg=git state=installed
-  tags: packages devel
-
-- name: install gitflow
-  sudo: True
-  yum: pkg=gitflow state=installed
-  tags: packages devel
-
-- name: install git-svn
-  sudo: True
-  yum: pkg=git-svn state=installed
-  tags: packages devel
 
 
 #
@@ -113,28 +239,46 @@
 
 - name: install zsh
   sudo: True
-  yum: pkg=zsh state=installed
+  yum: name=zsh state=present
+  when: ansible_pkg_mgr == "yum"
   tags: packages devel
+
+- name: install zsh
+  sudo: True
+  apt: pkg=zsh state=present
+  when: ansible_pkg_mgr == "apt"
+  tags: packages devel
+
 
 
 #
 # authbind: bind sockets to privileged ports without root
 #
 
-- name: check if authbind is installed
+
+- name: install authbind
   sudo: True
-  yum: pkg=authbind state=installed
-  register: authbind_installed
+  apt: pkg=authbind state=present
+  when: ansible_pkg_mgr == "apt"
+  tags: packages devel
+
+
+
+- name: check if authbind is present
+  sudo: True
+  yum: pkg=authbind state=present
+  register: authbind_present
   ignore_errors: yes
+  when: ansible_os_family == "CentOS"
   tags: packages
 
 - name: fetch authbind .rpm file, if necessary
   action: get_url url={{authbind_file_url}}  dest=/tmp/{{authbind_file}}
-  when: authbind_installed|failed
+  when: ansible_os_family == "CentOS"  and  authbind_present|failed
   tags: packages
 
 - name: install authbind, if necessary
   sudo: True
   action: command creates=/tmp/authbind chdir=/tmp rpm --force -Uvh  /tmp/{{authbind_file}}
-  when: authbind_installed|failed
+  when: ansible_os_family == "CentOS"  and  authbind_present|failed
   tags: packages

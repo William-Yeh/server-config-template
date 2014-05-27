@@ -23,6 +23,7 @@ Steps:
    - `hashicorp/precise64` for Ubuntu 12.04 LTS,
    - `chef/debian-7.4`     for Debian 7.4,
    - `chef/centos-6.5`     for CentOS 6.5,
+   - `yungsang/coreos`     for CoreOS.
 
 3. Initialize the box by the box name:
 

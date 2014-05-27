@@ -12,6 +12,18 @@
   when: ulimit is not defined
 
 
+- name: comment out "bridge" sysctl to avoid error
+  sudo: True
+  lineinfile: dest=/etc/sysctl.conf regexp='^net.bridge.bridge-nf-call-ip6tables' line='#net.bridge.bridge-nf-call-ip6tables = 0' state=present
+
+- name: comment out "bridge" sysctl to avoid error
+  sudo: True
+  lineinfile: dest=/etc/sysctl.conf regexp='^net.bridge.bridge-nf-call-iptables' line='#net.bridge.bridge-nf-call-iptables = 0' state=present
+
+- name: comment out "bridge" sysctl to avoid error
+  sudo: True
+  lineinfile: dest=/etc/sysctl.conf regexp='^net.bridge.bridge-nf-call-arptables' line='#net.bridge.bridge-nf-call-arptables = 0' state=present
+
 
 - name: maximum File Descriptors (FD) enforced on a kernel level
   # @see http://serverfault.com/questions/122679/how-do-ulimit-n-and-proc-sys-fs-file-max-differ
@@ -53,7 +65,7 @@
   action: sysctl name=net.ipv4.tcp_fin_timeout value=20 state=present
 
 
-- name: the number of unacknowledged probes to send before considering the connection dead and notifying the application layer 
+- name: the number of unacknowledged probes to send before considering the connection dead and notifying the application layer
   sudo: True
   action: sysctl name=net.ipv4.tcp_keepalive_probes value=5 state=present
 

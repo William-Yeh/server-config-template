@@ -1,0 +1,25 @@
+---
+# file: roles/docker/tasks/main.yml
+# Configure Docker common settings.
+#
+
+- name: be sure docker is installed
+  sudo: True
+  yum: name=docker-io state=present
+  when: ansible_pkg_mgr == "yum"
+  tags: packages
+
+- name: be sure docker is installed
+  sudo: True
+  apt: name=lxc-docker state=present
+  when: ansible_pkg_mgr == "apt"
+  tags: packages
+
+
+
+- name: be sure docker is enabled
+  sudo: True
+  service: name=docker state=started enabled=yes
+  tags: packages
+
+

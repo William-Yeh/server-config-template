@@ -1,0 +1,35 @@
+---
+# Tayra-related variables
+#
+# @note need to be included explicitly by "vars_file"
+#
+# About the Tayra software:
+#
+#   * Project home & source: https://github.com/EqualExperts/Tayra
+#   * Binary: http://www.eelabs.co.uk/projects/tayra/
+#   * Demo video: https://www.youtube.com/watch?v=CoKkoxF984I
+#
+
+
+#
+# source
+#
+
+tayra_version:      0.8.1.Beta3
+tayra_tarball_file: "Tayra-{{ tayra_version }}.zip"
+tayra_tarball_url:  "http://www.eelabs.co.uk/asset/other/{{ tayra_tarball_file }}"
+
+
+#
+# deployment
+#
+
+tayra_parent_path:  /opt
+tayra_install_path: "{{ tayra_parent_path }}/tayra"
+
+
+#
+# build
+#
+
+tayra_download_path: /tmp

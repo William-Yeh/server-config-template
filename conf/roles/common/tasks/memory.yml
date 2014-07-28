@@ -1,0 +1,33 @@
+---
+# file: roles/common/tasks/memory.yml
+# Configure memory optimization libs/tools.
+#
+# tags: packages memory
+#
+
+
+
+- name: install jemalloc
+  sudo: True
+  yum: name=jemalloc state=present
+  when: ansible_pkg_mgr == "yum"
+  tags: packages memory
+
+- name: install jemalloc
+  sudo: True
+  yum: name=jemalloc-devel state=present
+  when: ansible_pkg_mgr == "yum"
+  tags: packages memory
+
+
+- name: install jemalloc
+  sudo: True
+  apt: pkg=libjemalloc1 state=present
+  when: ansible_pkg_mgr == "apt"
+  tags: packages memory
+
+- name: install jemalloc
+  sudo: True
+  apt: pkg=libjemalloc-dev state=present
+  when: ansible_pkg_mgr == "apt"
+  tags: packages memory

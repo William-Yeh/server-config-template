@@ -1,19 +1,56 @@
 ---
 # file: roles/common/tasks/main.yml
-# Configure CentOS common settings.
+# Configure common settings for Linux operating systems.
 #
 
-- include: centos6_x64-time.yml
+
+
+#
+# get rid of the following error (occurred in Google Compute Engine, for example):
+#   "Could not import python modules: apt, apt_pkg. Please install python-apt package."
+#
+- name: install python-apt package explicitly
+  sudo: True
+  command: apt-get -y install python-apt
+  when: ansible_pkg_mgr == "apt"
+
+
+
+- include: time.yml
+- include: limit.yml
+
+- include: debian-locale.yml
+  when: ansible_pkg_mgr == "apt"
+
+
+
 - include: centos6_x64-yum.yml
-- include: centos6_x64-limit.yml
-- include: centos6_x64-disable-services.yml
-#- include: centos6_x64-sudo.yml
+  when: ansible_os_family == "CentOS"
+
+- include: debian-apt.yml
+  when: ansible_pkg_mgr == "apt"
+
+
+
+
+
+- include: disable-services.yml
+
+- include: security.yml
+
+
+###- include: centos6_x64-sudo.yml
+###  when: ansible_os_family == "CentOS"
+
+
+
+
 
 - include: maintenance.yml
-
 - include: tools.yml
 - include: perl.yml
 - include: python.yml
+- include: memory.yml
 - include: monitors.yml
 
 - include: benchmark.yml

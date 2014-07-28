@@ -1,0 +1,34 @@
+---
+# file: roles/common/tasks/debian-locale.yml
+# Configure Debian/Ubuntu locale system.
+#
+#
+# @see http://people.debian.org/~schultmc/locales.html
+#
+
+
+- name: enable zh_TW locale
+  sudo: True
+  lineinfile: dest=/etc/locale.gen regexp="^#\s+zh_TW.UTF-8\s+UTF-8" line="zh_TW.UTF-8 UTF-8" state=present
+
+- name: re-install locale data
+  sudo: True
+  command: /usr/sbin/locale-gen
+
+
+- name: ensure /etc/default/locale exist
+  sudo: True
+  file: path=/etc/default/locale owner=root group=root mode=0644 state=touch
+
+
+- name: set time-related messages to English
+  sudo: True
+  lineinfile: dest=/etc/default/locale  state=present  regexp=''  line='{{ item }}'
+  with_items:
+   - 'LC_TIME=en_US.UTF-8'
+
+
+
+#- name: re-configure locales
+#  sudo: True
+#  command: /usr/sbin/dpkg-reconfigure  locales

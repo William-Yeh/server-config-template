@@ -6,21 +6,23 @@
 - hosts: all
 
   vars_files:
-    #- group_vars/role-nginx
-    #- group_vars/role-redis
-    - group_vars/role-oracle-jdk7
-    - group_vars/role-ant
-    - group_vars/role-mariadb
+    - group_vars/role-nginx
+    - group_vars/role-nodejs
+    - group_vars/role-redis
+    #- group_vars/role-oracle-jdk7
+    #- group_vars/role-ant
+    #- group_vars/role-mariadb
     #- group_vars/role-cassandra-ring
     #- group_vars/role-cassandra-single
 
   roles:
     - common
-    #- nginx
+    - nginx
     - nodejs
-    #- redis
-    - oracle-jdk7
-    - ant
-    - mariadb
+    - redis
+    #- { role: oracle-jdk7-centos, when: ansible_os_family == "CentOS" }
+    #- { role: oracle-jdk7-debian, when: ansible_os_family == "Debian" }
+    #- ant
+    #- mariadb
     #- cassandra
 

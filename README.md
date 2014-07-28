@@ -11,6 +11,7 @@ Currently the following software stacks are provided:
 
 - Linux
   - CentOS 6 64bit
+  - Debian 7 64bit ("wheezy")
 
 - Java
   - oracle-jdk6
@@ -18,6 +19,7 @@ Currently the following software stacks are provided:
   - ant
 
 - DB
+  - mongodb
   - mariadb
   - cassandra
   - redis

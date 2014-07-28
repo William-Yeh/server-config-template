@@ -1,0 +1,8 @@
+---
+# file: roles/ant-debian/tasks/main.yml
+# Configure Ant common settings.
+#
+
+- name: install Ant
+  sudo: True
+  apt: pkg=ant state=present

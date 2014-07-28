@@ -4,6 +4,7 @@
 #
 
 - include: site-web.yml
+#- include: site-mongodb.yml
 #- include: site-db.yml
 #- include: site-analyzer.yml
 

@@ -45,17 +45,17 @@
 
 - name: copy Nginx main config file
   sudo: True
-  action: template src=../templates/nginx.conf.j2 dest=$nginx_config_path/nginx.conf
+  action: template src=../templates/nginx.conf.j2 dest={{ nginx_config_path }}/nginx.conf
 
 - name: copy Nginx application-specific config files
   sudo: True
-  copy: src={{ item }}  dest=$nginx_config_path/conf.d  owner=root group=root mode=0644
+  copy: src={{ item }}  dest={{ nginx_config_path }}/conf.d  owner=root group=root mode=0644
   with_fileglob:
     - "*.conf"
 
 - name: rename default/example conf files in $nginx_config_path/conf.d/
   sudo: True
-  command: mv -f $nginx_config_path/conf.d/$item  $nginx_config_path/conf.d/$item.bak
+  command: mv -f {{ nginx_config_path }}/conf.d/$item  {{ nginx_config_path }}/conf.d/$item.bak
   with_items:
    - default.conf
    - example_ssl.conf
@@ -74,4 +74,5 @@
 - name: start nginx
   sudo: True
   action: service name=nginx state=started enabled=yes
+
 

@@ -10,7 +10,7 @@
 # source
 #
 
-nginx_version: 1.4.4
+nginx_version: 1.6.2
 
 
 #

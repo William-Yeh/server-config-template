@@ -11,9 +11,8 @@
 # source
 #
 
+# use "nvm ls-remote" to see all available versions 
 nodejs_version: "0.10"
-redis_tarball_file: redis-$redis_version.tar.gz
-redis_tarball_url: http://download.redis.io/releases/$redis_tarball_file
 
 
 #
@@ -23,18 +22,11 @@ redis_tarball_url: http://download.redis.io/releases/$redis_tarball_file
 nodejs_parent_path:  /opt
 nodejs_install_path: "{{ nodejs_parent_path }}/nvm"
 nvm_exe_path:        "{{ nodejs_install_path }}/nvm.sh"
-redis_exe_path: /usr/local/bin
-redis_config_path: /etc/redis
-redis_loglevel: debug
-redis_logfile_path: /var/log/redis
-redis_pidfile_path: /var/run/redis
-redis_working_dir: /var/lib/redis
-#redis_working_dir: /var/lib/redis/$redis_version
 
 
 #
 # build
 #
 
-redis_download_path: /tmp
-redis_build_path: $redis_download_path/redis-$redis_version/src
+
+

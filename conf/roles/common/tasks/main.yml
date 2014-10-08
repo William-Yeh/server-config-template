@@ -14,6 +14,13 @@
   command: apt-get -y install python-apt
   when: ansible_pkg_mgr == "apt"
 
+- name: install libselinux-python for selinux-default instances, if any (e.g., Google Compute Engine).
+  sudo: True
+  yum: pkg=libselinux-python state=installed
+  when: ansible_pkg_mgr == "yum"
+  tags: packages
+
+
 
 
 - include: time.yml

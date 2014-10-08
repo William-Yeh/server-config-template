@@ -12,11 +12,6 @@
   yum: pkg=yum-priorities state=installed
   tags: packages
 
-- name: install libselinux-python for selinux-default instances, if any (e.g., Google Compute Engine).
-  sudo: True
-  yum: pkg=libselinux-python state=installed
-  tags: packages
-
 - name: set CentOS base priorities to highest
   sudo: True
   action: copy src=../files/CentOS-Base.repo dest=/etc/yum.repos.d/ owner=root group=root mode=0644

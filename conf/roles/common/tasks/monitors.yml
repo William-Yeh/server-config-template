@@ -30,15 +30,19 @@
 
 
 
-
-- name: enable monit service
+- name: default conf for monit
   sudo: True
-  service: name=monit state=started enabled=yes
+  copy: src=../files/monit.DEFAULT dest=/etc/monit.d/DEFAULT owner=root group=root mode=0644
   tags: packages monitor
 
 - name: logrotate for monit
   sudo: True
-  action: copy src=../files/monit.logrotate dest=/etc/logrotate.d/monit owner=root group=root mode=0644
+  copy: src=../files/monit.logrotate dest=/etc/logrotate.d/monit owner=root group=root mode=0644
+  tags: packages monitor
+
+- name: enable monit service
+  sudo: True
+  service: name=monit state=started enabled=yes
   tags: packages monitor
 
 
@@ -48,4 +52,5 @@
 #
 #- name: install Runit
 #  sudo: True
+
 

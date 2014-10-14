@@ -55,7 +55,7 @@
 
 - name: rename default/example conf files in $nginx_config_path/conf.d/
   sudo: True
-  command: mv -f {{ nginx_config_path }}/conf.d/$item  {{ nginx_config_path }}/conf.d/$item.bak
+  command: mv -f  {{ nginx_config_path }}/conf.d/{{ item }}   {{ nginx_config_path }}/conf.d/{{ item }}.bak
   with_items:
    - default.conf
    - example_ssl.conf

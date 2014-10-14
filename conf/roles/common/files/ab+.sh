@@ -41,7 +41,7 @@ for (( concurrency=$LOW_CONCURRENCY; concurrency<=$HIGH_CONCURRENCY; concurrency
 do
 	tempFile="temp/$PREFIX/c$concurrency-n$((NUM_CALL*concurrency)).log"
 	echo "$AB_PATH -c $concurrency -n $((NUM_CALL*concurrency)) $@" >$tempFile
-	startTime=`date`
+	startTime=`date '+%Y-%m-%dT%H:%M:%S%:z'`
 	$AB_PATH -c $concurrency -n $((NUM_CALL*concurrency)) $@ >>$tempFile 2>&1
 
 	if [ $? -ne 0 ]; then
